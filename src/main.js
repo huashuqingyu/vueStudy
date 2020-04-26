@@ -8,6 +8,7 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 import axios from 'axios';
+import global from "./utils/global";
 
 Vue.config.productionTip = false
 
@@ -15,7 +16,7 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 Vue.prototype.$axios=axios;
-Vue.prototype.$base="http://127.0.0.1:1001";
+Vue.prototype.$base=global.BASE_URL;
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | vueStudy`;
