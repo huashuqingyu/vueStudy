@@ -104,7 +104,7 @@
 
 <script>
   import ruleUtils from "../../utils/rules"
-  import getData from "../../utils/getData"
+  import getData from "@/request/getData"
   export default {
 
     data() {
@@ -133,7 +133,7 @@
     },
     created(){
        this.getData();
-       this.getCombox();
+      //  this.getCombox();
     },
     methods:{
       indexMethod(index) { // index
@@ -146,13 +146,23 @@
         this.currentRow = val;
       },
       getData(){
-        getData.getTableByFiledPage("T_USER","F_NAME",this.query)
-        if(data.type=="true"){
-          this.tableData = response.data.tableData;
-          this.totalCount = Number(response.data.countData[0].F_COUNT);
-        }else{
-
+        var data = {
+          strTableName: "T_USER",
+          strOrder: "F_NAME",
+          query: this.query
         }
+
+        getData.getTableByFiledPage(data)
+          .then(res=>{
+            console.log(res)
+          })
+
+        // if(data.type=="true"){
+        //   this.tableData = response.data.tableData;
+        //   this.totalCount = Number(response.data.countData[0].F_COUNT);
+        // }else{
+
+        // }
       },
       // getData () {// 获取table数据
       //   var  Query=[];
