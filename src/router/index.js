@@ -29,6 +29,10 @@ export default new VueRouter({
                     path:'/table',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Table.vue'),
                     meta: { title: '表格' }
+                },{
+                    path:'/user',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/User.vue'),
+                    meta: { title: '用户管理' }
                 }
             ]
         }

@@ -68,8 +68,8 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: 'tab选项卡'
+                    index: 'user',
+                    title: '用户管理'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
