@@ -103,7 +103,7 @@
     data() {
       return {
         tableData:[],
-        tableHeight: 100,
+        tableHeight: 600,
         header:[],
         editVisible:false,
         getform: {F_NAME:'',F_REMARK:'',F_ROLE:''},

@@ -56,7 +56,7 @@ export default {
     data() {
         return {
             collapse: false,
-            items: menu
+            items: []
         };
     },
     computed: {
@@ -65,12 +65,20 @@ export default {
         }
     },
     created() {
-        console.log(menu)
+        this.initMenu()
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
         bus.$on('collapse', msg => {
             this.collapse = msg;
             bus.$emit('collapse-content', msg);
         });
+        
+    },
+    methods:{
+        initMenu(){
+            var userMenu = ["1","2","3","4"]
+            var c = menu.filter(function(v){return userMenu.indexOf(v.id) > -1})
+            this.items = c
+        }
     }
 };
 </script>
