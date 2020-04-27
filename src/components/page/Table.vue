@@ -125,12 +125,16 @@
       }
     },
     mounted(){
-        window.onresize = () => {
-            this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
-        };
+      // 初始化table大小
+      setTimeout(()=>{
+        this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
+      },50)
+      // 监听浏览器变化
+      window.onresize = () => {
+          this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
+      };
     },
     created(){
-      this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
       this.getData();
       //  this.getCombox();
     },
