@@ -1,14 +1,7 @@
 
 <template>
-  <div >
-    <div class="dataTable" >
-      <div class="crumbs">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 基础表格
-          </el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
+  <div>
+    <div class="dataTable">
       <div class="container">
         <div class="handle-box">
           <el-button
@@ -24,7 +17,7 @@
           <el-input v-model="query.queryModel.F_NAME" placeholder="用户名" class="handle-input mr10"></el-input>
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
-      <el-table :data="tableData" border class="table" :height="tableHeight"
+      <el-table  :data="tableData" border class="table" :height="tableHeight"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 render-header="labelHead"
@@ -110,7 +103,7 @@
     data() {
       return {
         tableData:[],
-        tableHeight:635,
+        tableHeight: 100,
         header:[],
         editVisible:false,
         getform: {F_NAME:'',F_REMARK:'',F_ROLE:''},
@@ -131,8 +124,14 @@
         totalCount:0, //总数
       }
     },
+    mounted(){
+        window.onresize = () => {
+            this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
+        };
+    },
     created(){
-       this.getData();
+      this.tableHeight = this.$parent.$refs.content.offsetHeight - 190
+      this.getData();
       //  this.getCombox();
     },
     methods:{
@@ -152,8 +151,7 @@
           query: this.query
         }
 
-        getData.getTableByFiledPage(data)
-        .then(res=>{
+        getData.getTableByFiledPage(data).then(res=>{
           console.log(res)
         })
 

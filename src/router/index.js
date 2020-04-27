@@ -33,6 +33,10 @@ export default new VueRouter({
                     path:'/user',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/User.vue'),
                     meta: { title: '用户管理' }
+                },{
+                    path:'/page',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Page.vue'),
+                    meta: { title: '外部网页' }
                 }
             ]
         }

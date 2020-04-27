@@ -102,8 +102,8 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
+                    index: 'page',
+                    title: '外部页面示例'
                 },
                 {
                     icon: 'el-icon-pie-chart',
