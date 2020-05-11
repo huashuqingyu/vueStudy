@@ -1,102 +1,93 @@
 <template>
-<div>
-    <div class="dataTable">
-        <div class="container">
-            <div class="handle-box">
-                <el-input v-model="query.name.value" placeholder="用户名" class="handle-input mr10"></el-input>
-                <!-- <el-select v-model="query.F_ROLE.data22" filterable placeholder="请选择">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select> -->
-                <el-button type="primary" icon="el-icon-search" @click="getData">搜索</el-button>
-            </div>
-            <el-table :data="tableData" border class="table" :height="tableHeight" ref="multipleTable" header-cell-class-name="table-header" render-header="labelHead" highlight-current-row stripe @current-change="handleCurrentChange">
-                <el-table-column prop="F_NAME" label="用户名" width="100"></el-table-column>
-                <el-table-column prop="F_USERNAME" label="登录账号" width="100"></el-table-column>
-                <el-table-column prop="DICF_ROLE" label="角色" width="100"></el-table-column>
-                <el-table-column prop="F_REMARK" label="备注" width="100"></el-table-column>
-            </el-table>
+    <div class="container">
+        <div class="queryModel">
+            <el-input v-model="query.name.value" placeholder="字典"></el-input>
+            <el-button type="primary" icon="el-icon-search" @click="getData">搜索</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="handleCreate">新建</el-button>
         </div>
+        <div class="dataTable">
+            <el-row  :gutter="10">
+                <el-col :span="3">
+                    <el-table :data="busTableData" border :show-header="false"  class="table" :height="tableHeight" ref="multipleTable" highlight-current-row @current-change="handleCurrentChange">
+                        <el-table-column align="center"  prop="F_DICNAME"></el-table-column>
+                    </el-table>
+                </el-col>
+                <el-col :span="20">
+                    <el-table :data="dictableDate" :row-class-name="dictableDateRowClassName" border class="table" :height="tableHeight">
+                        <el-table-column v-for="item in dictableLabel" :key="item.F_INDEX" align="center" :label="item.F_DESCRIPTION" :prop="item.F_FIELDNAME"></el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                            <el-button
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>`
+                    </el-table>
+                </el-col>
+            </el-row>
+        </div>
+        
+        <el-dialog :title="editTitle" :visible.sync="editVisible" label-width="auto" width="40%">
+            <el-form :model="getform" :inline="true" :rules="rules" class="saveForm" ref="saveForm" label-width="100px">
+                <el-form-item label="名称" prop="F_TEXT">
+                     <el-input v-model="getform.F_TEXT" placeholder="名称" class="widthSet"></el-input>
+                </el-form-item>
+                <el-form-item label="字典编号" prop="F_VALUE">
+                    <el-input v-model="getform.F_VALUE" placeholder="字典编号" class="widthSet"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="F_REMARK">
+                    <el-input v-model="getform.F_OTHER" placeholder="备注" class="widthSet"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button plain @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit('saveForm',editType)">保存</el-button>
+            </span>
+        </el-dialog>
     </div>
-    <!-- 编辑弹出框 form表单-->
-    <el-dialog title="编辑" :visible.sync="editVisible" label-width="auto" width="40%">
-
-        <el-form :model="getform" :inline="true" :rules="rules" class="saveForm" ref="saveForm" label-width="100px">
-            <!-- 表单显示多行-->
-            <el-form-item label="角色">
-                <el-select v-model="getform.F_ROLE" placeholder="请选择" class="widthSet">
-                    <el-option v-for="item in options" :key="item.LABEL" :label="item.LABEL" :value="item.VALUE">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-
-            <el-form-item label="姓名" prop="F_NAME">
-                <el-input v-model="getform.F_NAME" placeholder="姓名" class="widthSet"></el-input>
-            </el-form-item>
-
-            <el-form-item label="备注" prop="F_REMARK">
-                <el-input v-model="getform.F_REMARK" placeholder="备注" class="widthSet"></el-input>
-            </el-form-item>
-
-        </el-form>
-
-        <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="editVisible = false">取 消</el-button>
-            <el-button type="primary" @click="resetForm('saveForm')">重 置</el-button>
-            <el-button type="primary" @click="clearForm('saveForm')">清 空</el-button>
-            <el-button type="primary" @click="saveEdit('saveForm')">确 定</el-button>
-        </span>
-    </el-dialog>
-</div>
 </template>
 
 <script>
 import ruleUtils from "../../../utils/rules"
 import getData from "@/request/getData"
+import saveData from "@/request/saveData"
 export default {
     data() {
         return {
-            tableData: [],
-            tableHeight: 600,
-            header: [],
-            editVisible: false,
+            dictableLabel: [], //字典表头
+            dictableDate: [], //字典数据
+            busTableData: [], 
+            currentData: {}, //选中数据
+            tableHeight: 600, //表格高度
+            editVisible: false, 
+            editTitle: "",
+            editType:"edit",
             getform: {
-                F_NAME: '',
-                F_REMARK: '',
-                F_ROLE: ''
+                F_TEXT: '',
+                F_VALUE: '',
+                F_OTHER: '',
+                F_DICTYPE: ''
             },
-            options: [],
             rules: {
-                F_NAME: [{
+                F_TEXT: {
                     validator: ruleUtils.isEmpty,
                     trigger: 'blur'
-                }, ]
+                },
+                F_VALUE: {
+                    validator: ruleUtils.isEmpty,
+                    trigger: 'blur'
+                }
             },
             query:{
-                name:{field:"F_NAME", value:"",operat:"like"}
-            },
-            options: [{
-                value: '选项1',
-                label: '黄金糕'
-                }, {
-                value: '选项2',
-                label: '双皮奶'
-                }, {
-                value: '选项3',
-                label: '蚵仔煎'
-                }, {
-                value: '选项4',
-                label: '龙须面'
-                }, {
-                value: '选项5',
-                label: '北京烤鸭'
-                }],
+                name:{field:"F_DICNAME", value:"",operat:"like"},
+                flag:{field:"F_FLAG", value:"0",operat:"="}
             }
-        },
+        }
+    },
     mounted() {
         // 初始化table大小
         setTimeout(() => {
@@ -109,118 +100,93 @@ export default {
     },
     created() {
         this.getData();
-        //  this.getCombox();
     },
     methods: {
-        handleCurrentChange(val) { // 选中的数据
-            this.currentRow = val;
+        dictableDateRowClassName({row, rowIndex}){
+            if (row.F_FLAG === 1) {
+                return 'error-row';
+            }
+            return '';
+        },
+        handleCurrentChange(val) {
+            this.currentData = val
+            let data = {
+                strTableName: "DIC_BUS",
+                strOrder: "F_DICTYPE",
+                query: [{field:"F_DICTYPE", value: val.F_DICTYPE, operat:"="}]
+            }
+            getData.getDataAll(data)
+            .then(res => {
+                this.dictableDate = res;
+            })
         },
         getData() {
             let data = {
-                strTableName: "T_USER",
-                strOrder: "F_NAME",
+                strTableName: "SYS_DICBUS",
+                strOrder: "F_DICTYPE",
                 query: this.query
             }
-            getData.getTableByFieldAll(data)
+            getData.getDataAll(data)
             .then(res => {
-                this.tableData = res;
+                this.busTableData = res;
+                this.dictableDate = []
             })
 
-        },
-        getCombox() {
-            var comboxModel = [];
-            comboxModel.push({
-                field: "F_DICTYPE",
-                value: "usertype",
-                operator: "="
-            });
-
-            this.$axios.get(this.$base + '/combox/getComboxVue', {
-                    params: {
-                        strTableName: "DIC_BUS",
-                        strValue: "F_VALUE",
-                        strText: "F_TEXT",
-                        strModel: JSON.stringify(comboxModel),
-                        strOrder: "F_INDEX"
-                    }
-                })
-                .then((response) => {
-                    this.options = response.data;
-                })
-
+            getData.getTableByField("DIC_BUS")
+            .then(res => {
+                this.dictableLabel = res;
+            })
         },
         handleEdit(index, row) { // 编辑操作
-            this.idx = index;
-            console.log(row);
             this.getform = row;
+            this.editTitle = "编辑";
+            this.editType = "edit"
             this.editVisible = true;
         },
-        resetForm(formName) { // 重置表单
-            this.$refs[formName].resetFields();
-        },
-        clearForm() {
-            this.getform = {
-                F_NAME: '',
-                F_REMARK: '',
-                F_ROLE: ''
+        handleCreate() { 
+            if(JSON.stringify(this.currentData) === '{}'){
+                this.$message.warning("请先选择字典");
+                return
             }
+            this.getform.F_DICTYPE = this.currentData.F_DICTYPE
+            this.editTitle = "新建";
+            this.editType = "save"
+            this.editVisible = true;
         },
-        saveEdit(formName) {
+        saveEdit(formName, type) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    switch (type) {
+                        case "edit":
+                            let data = {
+                                strTableName: "DIC_BUS",
+                                strKey: "F_KEY",
+                                save: this.getform
+                            }
+                            saveData.updateByField(data)
+                            .then(res => {
+                                if(res.type == "true"){
+                                this.$message.success(res.message);
+                                    this.editVisible = false;
+                                }else{
+                                    this.$message.error(res.message);
+                                }
+                            })
+                            break
+                        case "save":
+                            console.log("save")    
+                    }
+
+                    
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
-        },
-        handlePageChange(val) { //页码改变
-            this.query.page.currentPage = val;
-            this.getData();
-        },
-        handleSizeChange(val) { //页面条数改变
-            this.query.page.pageSize = val;
-            this.getData();
-        }, //删除全部
-        delAllSelection() {
-
         }
     }
 }
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
 
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-
-.red {
-    color: #ff0000;
-}
-
-.mr10 {
-    margin-right: 10px;
-}
-
-.table-td-thumb {
-    display: block;
-    margin: auto;
-    width: 40px;
-    height: 40px;
-}
 </style>
