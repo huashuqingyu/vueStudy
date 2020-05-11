@@ -187,6 +187,9 @@
       getCombox(){
         var comboxModel=[];
         comboxModel.push({field:"F_DICTYPE",value:"usertype",operator:"="});
+
+
+
         this.$axios.get(this.$base + '/combox/getComboxVue', {
           params: {
             strTableName: "DIC_BUS",
@@ -199,6 +202,8 @@
         .then((response) => {
           this.options = response.data;
         })
+
+
 
       },
       handleEdit(index, row) {// 编辑操作

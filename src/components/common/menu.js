@@ -5,20 +5,33 @@ const menus = [
         index: 'dashboard',
         title: '系统首页'
     },
-    {
+    {   
         id: '2',
+        icon: 'el-icon-menu',
+        index: 'dashboard',
+        title: '系统管理',
+        subs: [
+            {   
+                id:'2-1',
+                index: 'dicManeger',
+                title: '字典管理'
+            }
+        ]
+    },
+    {
+        id: '3',
         icon: 'el-icon-lx-cascades',
         index: 'table',
         title: '基础表格'
     },
     {
-        id: '3',
+        id: '4',
         icon: 'el-icon-lx-copy',
         index: 'user',
         title: '用户管理'
     },
     {
-        id: '4',
+        id: '5',
         icon: 'el-icon-lx-emoji',
         index: 'page',
         title: '外部页面示例'

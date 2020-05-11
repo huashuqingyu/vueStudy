@@ -26,6 +26,10 @@ export default new VueRouter({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },{
+                    path: '/dicManeger',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/sysmanager/DicManager.vue'),
+                    meta: { title: '字典管理' }
+                },{
                     path:'/table',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Table.vue'),
                     meta: { title: '表格' }

@@ -3,30 +3,23 @@
     <div class="dataTable">
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
-                <el-input v-model="query.queryModel.F_NAME" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-input v-model="query.name.value" placeholder="用户名" class="handle-input mr10"></el-input>
+                <!-- <el-select v-model="query.F_ROLE.data22" filterable placeholder="请选择">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select> -->
+                <el-button type="primary" icon="el-icon-search" @click="getData">搜索</el-button>
             </div>
             <el-table :data="tableData" border class="table" :height="tableHeight" ref="multipleTable" header-cell-class-name="table-header" render-header="labelHead" highlight-current-row stripe @current-change="handleCurrentChange">
-                <el-table-column type="selection" width="55" fixed align="center"></el-table-column>
-                <el-table-column type="index" label="序号" fixed width="50" :index="indexMethod"></el-table-column>
-                <el-table-column prop="F_KEY" label="主键" width="55" align="center" v-if="false"></el-table-column>
-                <!--隐藏某列 -->
                 <el-table-column prop="F_NAME" label="用户名" width="100"></el-table-column>
                 <el-table-column prop="F_USERNAME" label="登录账号" width="100"></el-table-column>
                 <el-table-column prop="DICF_ROLE" label="角色" width="100"></el-table-column>
                 <el-table-column prop="F_REMARK" label="备注" width="100"></el-table-column>
-                <el-table-column label="操作" width="180" align="center">
-                    <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
             </el-table>
-            <div class="pagination-bar">
-                <el-pagination @size-change="handleSizeChange" @current-change="handlePageChange" :current-page="query.page.currentPage" :page-sizes="[20, 50, 100]" :page-size="query.page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
-                </el-pagination>
-            </div>
         </div>
     </div>
     <!-- 编辑弹出框 form表单-->
@@ -62,10 +55,9 @@
 </template>
 
 <script>
-import ruleUtils from "../../utils/rules"
+import ruleUtils from "../../../utils/rules"
 import getData from "@/request/getData"
 export default {
-
     data() {
         return {
             tableData: [],
@@ -78,25 +70,33 @@ export default {
                 F_ROLE: ''
             },
             options: [],
-            value: '',
             rules: {
                 F_NAME: [{
                     validator: ruleUtils.isEmpty,
                     trigger: 'blur'
                 }, ]
             },
-            query: {
-                queryModel: {
-                    F_NAME: ''
-                },
-                page: {
-                    pageSize: 20, // 显示数量
-                    currentPage: 1 //当前页
-                }
+            query:{
+                name:{field:"F_NAME", value:"",operat:"like"}
             },
-            totalCount: 0, //总数
-        }
-    },
+            options: [{
+                value: '选项1',
+                label: '黄金糕'
+                }, {
+                value: '选项2',
+                label: '双皮奶'
+                }, {
+                value: '选项3',
+                label: '蚵仔煎'
+                }, {
+                value: '选项4',
+                label: '龙须面'
+                }, {
+                value: '选项5',
+                label: '北京烤鸭'
+                }],
+            }
+        },
     mounted() {
         // 初始化table大小
         setTimeout(() => {
@@ -112,27 +112,18 @@ export default {
         //  this.getCombox();
     },
     methods: {
-        indexMethod(index) { // index
-            return index + 1;
-        },
-        setCurrent(row) {
-            this.$refs.singleTable.setCurrentRow(row);
-        },
         handleCurrentChange(val) { // 选中的数据
             this.currentRow = val;
         },
         getData() {
-            var data = {
+            let data = {
                 strTableName: "T_USER",
                 strOrder: "F_NAME",
                 query: this.query
             }
-
-            getData.getTableByFiledPage(data).then(res => {
-                if (res.type == "true") {
-                    this.tableData = res.tableData;
-                    this.totalCount = Number(res.countData[0].F_COUNT);
-                }
+            getData.getTableByFieldAll(data)
+            .then(res => {
+                this.tableData = res;
             })
 
         },
@@ -194,10 +185,6 @@ export default {
         }, //删除全部
         delAllSelection() {
 
-        }, //查询
-        handleSearch() {
-            this.query.page.currentPage = 1
-            this.getData();
         }
     }
 }
