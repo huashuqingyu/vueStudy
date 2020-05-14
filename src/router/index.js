@@ -35,12 +35,16 @@ export default new VueRouter({
                     meta: { title: '表格' }
                 },{
                     path:'/user',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/User.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/sysmanager/User.vue'),
                     meta: { title: '用户管理' }
                 },{
                     path:'/page',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Page.vue'),
                     meta: { title: '外部网页' }
+                },{
+                    path:'/camera',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Camera.vue'),
+                    meta: { title: '高拍仪' }
                 }
             ]
         }

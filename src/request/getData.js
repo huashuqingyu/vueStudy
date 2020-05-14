@@ -12,6 +12,7 @@ const service = {
         })
         return promise
     },
+
     /**
      * 分页查询
      * 
@@ -27,10 +28,16 @@ const service = {
      *  } params
      */
     getTableByFiledPage: function (params) {
-        var query = [params.query];
+        var query = []
+        for(var key in params.query.queryModel){
+            if(params.query.queryModel[key].value){
+                query.push({field:key, value:params.query.queryModel[key].value, operator:params.query.queryModel[key].operat})
+            }
+        }
         var promise = http.get('/dataInfro/getDataByPageFieldForVue', {
             strTableName: params.strTableName,
-            QueryMoel: JSON.stringify(query),
+            queryModel: JSON.stringify(query),
+            pageModel: JSON.stringify(params.query.page),
             strOrder: params.strOrder
         })
         return promise
@@ -46,7 +53,7 @@ const service = {
     getDataAll: function(params) {
         var query = []
         for(var key in params.query){
-            query.push({field:params.query[key].field, value:params.query[key].value, operator:params.query[key].operat})
+            query.push({field:key, value:params.query[key].value, operator:params.query[key].operat})
         }
         var promise = http.get('/dataInfro/getDataAll', {
             strTableName: params.strTableName,
@@ -72,6 +79,25 @@ const service = {
             strTableName: params.strTableName,
             strModel: JSON.stringify(query),
             strOrder: params.strOrder
+        })
+        return promise
+    },
+
+    /**
+    * 查询所有数据
+    * 
+    * @param {
+    *     query:[{field:"F_DICTYPE", value: val.F_DICTYPE, operat:"="}]
+    * } params 
+    */
+    getComboxVue: function(param) {
+        var query = [param]
+        var promise = http.get('/combox/getComboxVue', {
+            strTableName: "DIC_BUS",
+            strValue: "F_VALUE",
+            strText: "F_TEXT",
+            strModel: JSON.stringify(query),
+            strOrder: "F_INDEX"
         })
         return promise
     }

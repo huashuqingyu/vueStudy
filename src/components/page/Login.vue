@@ -55,12 +55,12 @@ export default {
                         password: that.param.password,
                     })
                     .then(res=>{
-                      if(res.type == "0"){
-
+                      if(res.type == "1"){
+                        this.$message.success('登录成功');
+                        localStorage.setItem('ms_username', this.param.username);
+                        this.$router.push('/dashboard');
                       }
-                      this.$message.success('登录成功');
-                      localStorage.setItem('ms_username', this.param.username);
-                      this.$router.push('/dashboard');
+                      
                     })
                     
                 } else {

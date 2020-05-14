@@ -7,10 +7,20 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
-// import axios from 'axios';
+import VueCookies from 'vue-cookies'
+// 引入通用方法
+import ruleUtils from "@/utils/rules"
+import getData from "@/request/getData"
+import saveData from "@/request/saveData"
+import delData from "@/request/delData"
+Vue.prototype.$ruleUtils = ruleUtils;
+Vue.prototype.$getData = getData;
+Vue.prototype.$saveData = saveData;
+Vue.prototype.$delData = delData;
+
 
 Vue.config.productionTip = false
-
+Vue.use(VueCookies)
 Vue.use(ElementUI, {
   size: 'small'
 });

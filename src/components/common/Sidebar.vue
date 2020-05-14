@@ -10,7 +10,7 @@
             unique-opened
             router
         >
-            <template v-for="item in items">
+            <template v-for="item in items" >
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
@@ -51,7 +51,7 @@
 
 <script>
 import bus from './bus';
-import menu from './menu';
+import {menusOld, createMenuFunc} from './menu/main';
 export default {
     data() {
         return {
@@ -75,9 +75,11 @@ export default {
     },
     methods:{
         initMenu(){
-            var userMenu = ["1","2","3","4"]
-            var c = menu.filter(function(v){return userMenu.indexOf(v.id) > -1})
-            this.items = c
+            var userMenu = ["1","2","2-1","2-2","3"]
+            userMenu  = menusOld.filter(function(v){
+                return userMenu.indexOf(v.id) > -1
+            })
+            this.items =  createMenuFunc(userMenu)
         }
     }
 };
