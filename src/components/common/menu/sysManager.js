@@ -3,8 +3,8 @@ const sysManager = [
     id: '2',
     icon: 'el-icon-setting',
     index: 'sysManager',
-    subs: [],
     title: '系统管理',
+    haschild: true
     },
     {   
         id:'2-1',
@@ -18,6 +18,13 @@ const sysManager = [
         icon: 'el-icon-lx-copy',
         index: 'user',
         title: '用户管理'
+    },
+    {
+        id: '2-3',
+        parentId:'2',
+        icon: 'el-icon-lx-copy',
+        index: 'role',
+        title: '权限管理'
     }
 ]
 

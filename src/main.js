@@ -13,10 +13,12 @@ import ruleUtils from "@/utils/rules"
 import getData from "@/request/getData"
 import saveData from "@/request/saveData"
 import delData from "@/request/delData"
+import http from "@/request/http"
 Vue.prototype.$ruleUtils = ruleUtils;
 Vue.prototype.$getData = getData;
 Vue.prototype.$saveData = saveData;
 Vue.prototype.$delData = delData;
+Vue.prototype.$http = http;
 
 
 Vue.config.productionTip = false

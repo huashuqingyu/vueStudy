@@ -38,6 +38,10 @@ export default new VueRouter({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/sysmanager/User.vue'),
                     meta: { title: '用户管理' }
                 },{
+                    path:'/role',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/sysmanager/Role.vue'),
+                    meta: { title: '权限管理' }
+                },{
                     path:'/page',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Page.vue'),
                     meta: { title: '外部网页' }

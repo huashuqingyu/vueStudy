@@ -1,7 +1,7 @@
 import sysManager from "./sysManager"
 import other from "./other"
 
-var  menusOld = [
+var  menusList = [
     {   
         id: '1',
         icon: 'el-icon-menu',
@@ -9,15 +9,19 @@ var  menusOld = [
         title: '系统首页'
     }
 ],
-menusOld = menusOld.concat(other)
-menusOld = menusOld.concat(sysManager)
+menusList = menusList.concat(other)
+menusList = menusList.concat(sysManager)
 
-
+// 权限筛选后，格式化菜单
 function createMenuFunc (menus){ 
     var createMenu = []
 
     for(var i=0; i<menus.length; i++){
         if(!menus[i].parentId){
+
+            if(menus[i].haschild){
+                menus[i].subs = []
+            }
             createMenu.push(menus[i])
         }
     }
@@ -32,6 +36,36 @@ function createMenuFunc (menus){
     return createMenu
 }
 
-export  {menusOld, createMenuFunc}
+
+// 格式化菜单树
+function createMenuTreeFunc (){ 
+    var createMenu = []
+
+    for(var i=0; i<menusList.length; i++){
+        if(!menusList[i].parentId){
+            var treeNode = new Object;
+            treeNode.id = menusList[i].id
+            treeNode.label = menusList[i].title
+            if(menusList[i].subs){
+                treeNode.children = []
+            }
+            createMenu.push(treeNode)
+        }
+    }
+    for(var i=0; i<menusList.length; i++){
+        if(menusList[i].parentId){
+            var treeNode = new Object;
+            treeNode.id = menusList[i].id
+            treeNode.label = menusList[i].title
+            var parent=createMenu.find(function (obj) {
+                return obj.id === menusList[i].parentId
+            })
+            parent.children.push(treeNode)
+        }
+    }
+    return createMenu
+}
+
+export  {menusList, createMenuFunc, createMenuTreeFunc}
 
 

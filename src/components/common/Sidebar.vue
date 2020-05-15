@@ -51,7 +51,7 @@
 
 <script>
 import bus from './bus';
-import {menusOld, createMenuFunc} from './menu/main';
+import {menusList, createMenuFunc} from './menu/main';
 export default {
     data() {
         return {
@@ -75,11 +75,18 @@ export default {
     },
     methods:{
         initMenu(){
-            var userMenu = ["1","2","2-1","2-2","3"]
-            userMenu  = menusOld.filter(function(v){
-                return userMenu.indexOf(v.id) > -1
+            let query = {"F_ROLEID":{value: $cookies.get("roleid") , operat:"="}}
+            this.$getData.getDataAll({strTableName: "SYS_ROLE",strOrder: "F_ROLEID",query: query}).then(res => {
+                if(res.length > 0){
+                    var userMenu = res[0].F_MENUS;
+                    userMenu  = menusList.filter(function(v){
+                        return userMenu.indexOf(v.id) > -1
+                    })
+                    this.items =  createMenuFunc(userMenu)
+                }else{
+                    this.$message.error("请联系管理员为您分配权限");
+                }
             })
-            this.items =  createMenuFunc(userMenu)
         }
     }
 };

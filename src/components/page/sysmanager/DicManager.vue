@@ -2,13 +2,13 @@
     <div class="container">
         <div class="queryModel">
             <el-input v-model="query.F_DICNAME.value" placeholder="字典"></el-input>
-            <el-button type="primary" icon="el-icon-search" @click="getData">搜索</el-button>
-            <el-button type="success" icon="el-icon-plus" @click="handleCreate">新建</el-button>
+            <el-button icon="el-icon-search" @click="getData">搜索</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新建</el-button>
         </div>
         <div class="dataTable">
             <el-row :gutter="10">
-                <el-col :span="3">
-                    <el-table :data="busTableData" border :show-header="false"  class="table" :height="tableHeight" ref="multipleTable" @current-change="handleCurrentChange">
+                <el-col :span="3"> 
+                    <el-table :data="busTableData" highlight-current-row border :show-header="false"  class="table" :height="tableHeight" ref="multipleTable" @current-change="handleCurrentChange">
                         <el-table-column align="center"  prop="F_DICNAME"></el-table-column>
                     </el-table>
                 </el-col>
@@ -50,9 +50,6 @@
                 </el-form-item>
                 <el-form-item label="备注">
                     <el-input v-model="getform.F_OTHER.value" placeholder="备注" class="widthSet"></el-input>
-                </el-form-item>
-                <el-form-item label="备注" prop="value">
-                    <el-input v-model="getform.value" placeholder="备注" class="widthSet"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

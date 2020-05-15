@@ -6,8 +6,8 @@
              <el-option label="-请选择-" value=""></el-option>
             <el-option v-for="item in roleOptions" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE"></el-option>
         </el-select>
-        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="handleCreate">新建</el-button>
+        <el-button icon="el-icon-search" @click="search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新建</el-button>
     </div>
 
     <div class="dataTable">
