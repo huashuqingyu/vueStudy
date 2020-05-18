@@ -6,8 +6,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-
-    <link href="../src/assets/camera/css/test.css" rel="stylesheet" >
+    
+    <link href="./static/camera/css/test.css" rel="stylesheet" >
+    <script src="./static/camera/js/WsUtil.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./static/camera/js/OcxUtil.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./static/camera/js/axCam_Ocx.js" type="text/javascript" charset="utf-8" for="axCam_Ocx" event="MessageCallback(type,str)"></script>
+    <script src="./static/camera/js/axCam_Ocx2.js" type="text/javascript" charset="utf-8" for="axCam_Ocx2" event="MessageCallback(type,str)"></script>
   </head>
   <body>
     <noscript>

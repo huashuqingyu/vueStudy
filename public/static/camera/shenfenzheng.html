@@ -1,0 +1,259 @@
+﻿<html>
+
+<head>
+  <!--<meta http-equiv="Content-Type" content="text/html; charset=gb2312">-->
+  <meta http-equiv="X-UA-Compatible" content="IE=10"/>
+  <title>SDK 演示</title>
+
+  <link href="./css/test.css" rel="stylesheet" >
+
+  <script src="js/WsUtil.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/OcxUtil.js" type="text/javascript" charset="utf-8"></script>
+   <script src="js/axCam_Ocx.js" type="text/javascript" charset="utf-8" for="axCam_Ocx" event="MessageCallback(type,str)"></script>
+
+
+  <script >
+
+    var isIE = true;
+
+    //页面关闭时,关闭读卡
+    window.onbeforeunload = function(event) { 
+       StopICWork();
+   }
+
+
+   //加载控件
+   function loadActiveX() {
+    //判断是不是IE浏览器
+    if (navigator.userAgent.indexOf('MSIE') >= 0) {
+         isIE = true;
+         document.getElementById("ActiveXDivOne").innerHTML = "<OBJECT id=\"axCam_Ocx\"  classid=\"clsid:D5BD5B4A-4FC0-4869-880B-27EE9869D706\" width=\"1px\" height=\"1px\" ></OBJECT>";
+     }else {
+        isIE = false;
+        if (!window.WebSocket) { 
+            alert("WebSocket not supported by this browser!"); 
+        } 
+        WsInit(0,0,0,0,false);
+    }
+}
+
+function LoadOver(){
+  StartIC();
+}
+
+//初始化模块
+function funStartIC(){
+    StartIC();
+}
+
+//开始自动读卡
+function funStartICWork(){
+    StartICWork();
+}
+
+//关闭自动读卡
+function funStopICWork(){
+    StopICWork();
+}
+
+
+//信息回调
+function InfoCallback(op) {
+  
+  var text = "";
+  if(op == 0){
+    text = "连接成功\r\n";
+}else if(op == 0x01){
+    text = "断开成功\r\n";
+}else if(op == 0x02){
+    text = "设备已经连接\r\n";
+}else if(op == 0x03){
+    text = "设备已经关闭\r\n";
+}else if(op == 0x04){
+    text = "拍照成功\r\n";
+}else if(op == 0x05){
+    text = "pdf添加文件成功\r\n";
+}else if(op == 0x06){
+    text = "pdf保存成功\r\n";
+}else if(op == 0x07){
+    text = "图片合并成功\r\n";
+}else if(op == 0x08){
+    text = "智能连拍启动\r\n";
+}else if(op == 0x09){
+    text = "定时连拍启动\r\n";
+}else if(op == 0x10){
+    text = "定时连拍成功\r\n";
+}else if(op == 0x11){
+    text = "定时连拍关闭\r\n";
+}else if(op == 0x12){
+    text = "文件上传服务器成功\r\n";
+}else if(op == 0x13){
+    text = "水印开启\r\n";
+}else if(op == 0x14){
+    text = "水印关闭\r\n";
+}else if(op == 0x15){
+    text = "此设备属于本公司\r\n";
+}else if(op == 0x16){
+    text = "此设备不属于本公司\r\n";
+}else if(op == 0x17){
+    text = "自动曝光启动\r\n";
+}else if(op == 0x18){
+    text = "自动曝光关闭\r\n";
+}else if(op == 0x19){
+    text = "身份证功能启动成功\r\n";
+    StartICWork();
+}else if(op == 0x1a){
+    text = "身份证功能启动失败\r\n";
+}else if(op == 0x1b){
+    text = "身份证读卡成功\r\n";
+}else if(op == 0x1c){
+    text = "身份证读卡失败\r\n";
+}else if(op == 0x1d){
+    text = "重新操作\r\n";
+}else if(op == 0x1e){
+    text = "未发现模块\r\n";
+}else if(op == 0x1f){
+    text = "未启动身份证功能\r\n";
+}else if(op == 0x20){
+    text = "启动身份证自动读卡\r\n";
+}else if(op == 0x21){
+    text = "关闭身份证自动读卡\r\n";
+}else if(op == 0x22){
+    text = "启动拍照只生成base64\r\n";
+}else if(op == 0x23){
+    text = "关闭拍照只生成base64\r\n";
+}else if(op == 0x24){
+  //webSocket启动成功
+  StartIC();
+}
+
+
+else if(op == 0xa0){
+    text = "没有对应分辨率\r\n";     
+}else if(op == 0xa1){
+    text = "pdf没有添加任何文件\r\n";     
+}else if(op == 0xa2){
+    text = "文件不存在\r\n";     
+}else if(op == 0xa3){
+    text = "意外断开\r\n";     
+}else if(op == 0xa4){
+    text = "连接不上\r\n";     
+}else if(op == 0xa5){
+    text = "pdf添加文件不是jpg格式\r\n";     
+}else if(op == 0xa6){
+    text = "没有发现摄像头\r\n";     
+}else if(op == 0xa7){
+    text = "camid无效\r\n";     
+}else if(op == 0xa8){
+    text = "图片尺寸太小\r\n";     
+}else if(op == 0xa9){
+    text = "文件上传服务器失败\r\n";     
+}else if(op == 0xaa){
+    text = "该设备没有副头\r\n";     
+}else if(op == 0xab){
+    text = "条码识别失败\r\n";     
+}else if(op == 0xac){
+    text = "二维码识别失败\r\n";     
+}else if(op == 0xad){
+    text = "图片合并失败\r\n";     
+}else if(op == 0xae){
+    text = "设置路径文件不存在\r\n";     
+}
+var obj = document.getElementById("TextArea1");
+obj.value = text+ obj.value;
+}
+
+//信息回调
+function InfoTextCallback(type,str){
+  var text = "";
+  if(type == 0){
+   text = "图片路径:"+str+"\r\n";
+}else if(type == 1){
+   text = "默认路径:    "+str+"\r\n";
+
+}else if(type == 2){
+   text = "条码:    "+str+"\r\n";
+
+}else if(type == 3){
+   text = "文件上传服务器成功:"+str+"\r\n";
+
+}else if(type == 4){
+   text = "文件上传服务器失败:"+str+"\r\n";
+
+}else if(type == 5){
+  //text = "base64编码成功\r\n";
+  text ="data:;base64," +str+"\r\n";
+}else if(type == 6){
+   text = "删除文件成功:"+str+"\r\n";
+}else if(type == 7){
+   text = "二维码:"+str+"\r\n";
+}else if(type == 8){
+   text = "拍照失败:"+str+"\r\n";
+}
+
+else if(type == 9){
+   text = "身份证名字:"+str+"\r\n";
+}else if(type == 10){
+   text = "身份证号码:"+str+"\r\n";
+}else if(type == 11){
+   text = "身份证性别:"+str+"\r\n";
+}else if(type == 12){
+   text = "身份证民族:"+str+"\r\n";
+}else if(type == 13){
+   text = "身份证生日:"+str+"\r\n";
+}else if(type == 14){
+   text = "身份证地址:"+str+"\r\n";
+}else if(type == 15){
+   text = "身份证签发机关:"+str+"\r\n";
+}else if(type == 16){
+   text = "身份证有效开始日期:"+str+"\r\n";
+}else if(type == 17){
+   text = "身份证有效截至日期:"+str+"\r\n";
+}else if(type == 18){
+   text = "安全模块号:"+str+"\r\n";
+}else if(type == 19){
+    var imgobj1 = document.getElementById("img1");
+    imgobj1.src = "data:;base64," + str;
+}else if(type == 21){
+   text ="data:;base64," +str+"\r\n";
+}
+var obj = document.getElementById("TextArea1");
+obj.value = text+ obj.value;
+}
+
+</script>
+
+</head>
+
+<body onload ="loadActiveX();">
+
+    <div style="width: 1px;height: 1px" id='ActiveXDivOne'>
+    </div>
+
+
+
+    <div style="width:200px; height: 100px; border: 1px solid black; background:#C7EDCC;  float:left">
+        身份证:
+
+        <input id="ButtonStartID" type="button" value="启动身份证模块" onclick = "funStartIC();"/>
+
+        <input id="ButtonStartID" type="button" value="自动读卡" onclick = "funStartICWork();"/>
+
+        <input id="ButtonStartID" type="button" value=" 关闭自动读卡" onclick = "funStopICWork();"/>
+
+    </div>	
+
+
+    <div style="width: 80px;height: 100px; float:left ">
+       <img id="img1"  style="width: 80px;height: 100px" />
+   </div>
+
+
+   <div style="width: 280px;height: 200px">
+      <textarea id="TextArea1" cols="20" rows="2" style="width: 100%;height:100%;">
+      </textarea> 
+  </div>
+
+</body>
+
+</html>
